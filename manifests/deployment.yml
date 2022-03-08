@@ -1,19 +1,19 @@
 apiVersion : apps/v1
 kind: Deployment
 metadata:
-  name: "apiaksdev-7ce3"
+  name: "board-api"
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
-      app: "apiaksdev-7ce3"
+      app: "board-api"
   template:
     metadata:
       labels:
-        app: "apiaksdev-7ce3"
+        app: "board-api"
     spec:
       containers:
-        - name: "apiaksdev-7ce3"
+        - name: "board-api"
           image: "miniprojectacr.azurecr.io/apiaksdev"
           ports:
           - containerPort: 8090
