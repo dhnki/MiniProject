@@ -28,7 +28,7 @@
 					<h3>API</h3>
 					<ul>
 						<li>SpringBoot</li>
-						<li>MyBatis</li>
+						<li>MyBatis_test</li>
 						<li>Docker</li>
 						<li>MySQL</li>
 					</ul>
