@@ -23,6 +23,9 @@ jobs:
 
       - name: Build with Maven
         run: mvn clean install
+        with:
+          name: java-build
+          path: '${{ github.workspace }}/board-api'
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
