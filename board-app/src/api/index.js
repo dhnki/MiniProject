@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const instance = axios.create({
-	baseURL: 'https://miniproject-api.azurewebsites.net',
+	baseURL: 'http://20.214.80.201:8090',
 })
 
 instance.defaults.headers.post['Content-Type'] =
