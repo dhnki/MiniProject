@@ -12,13 +12,10 @@ jobs:
           java-version: '8'
 
       - name: Build with Maven
-        run: mvn clean install --file board-api/pom.xml
-        
-      - uses: actions/checkout@v2
-      - run: mkdir -p target/
+        run: mvn clean install --file board-api/pom.xml        
 
       - name: Upload artifact for deployment job
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: java-app
           path: '${{ github.workspace }}/board-api/target/*.jar'
@@ -29,12 +26,11 @@ jobs:
     steps:
     - uses: actions/checkout@master
     
-    - uses: actions/checkout@v2
-    - uses: actions/download-artifact@v2
+    - uses: actions/download-artifact@v3
       with:
         name: java-app
-        path: target/
-    - run: cat target/java-app.jar
+        path: '${{ github.workspace }}/board-api/target'
+        
     
     - uses: azure/docker-login@v1
       with:
