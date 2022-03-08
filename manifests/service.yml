@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+    name: "apiaksdev-7ce3"
+    labels:
+        app: "apiaksdev-7ce3"
+spec:
+    type: LoadBalancer
+    ports:
+    - port: 8090
+      targetPort: 8090
+      protocol: TCP
+      name: http
+    selector:
+        app: "apiaksdev-7ce3"
