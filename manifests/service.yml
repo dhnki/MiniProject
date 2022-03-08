@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: Service
 metadata:
-    name: "apiaksdev-7ce3"
+    name: "board-api"
     labels:
-        app: "apiaksdev-7ce3"
+        app: "board-api"
 spec:
     type: LoadBalancer
     ports:
@@ -12,4 +12,4 @@ spec:
       protocol: TCP
       name: http
     selector:
-        app: "apiaksdev-7ce3"
+        app: "board-api"
