@@ -22,7 +22,7 @@ jobs:
           java-version: '8'
 
       - name: Build with Maven
-        run: ${{board-api}}/mvn clean install
+        run: ${{/board-api}}/mvn clean install
         
 
       - name: Upload artifact for deployment job
