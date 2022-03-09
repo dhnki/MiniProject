@@ -1,0 +1,77 @@
+on: [push]
+jobs:
+ build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Java version
+        uses: actions/setup-java@v1
+        with:
+          java-version: '8'
+
+      - name: Build with Maven
+        run: mvn clean install --file board-api/pom.xml        
+
+      - name: Upload artifact for deployment job
+        uses: actions/upload-artifact@v3
+        with:
+          name: java-app
+          path: '${{ github.workspace }}/board-api/target/*.jar'
+  
+ build-and-deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+    - uses: actions/checkout@master
+    
+    - uses: actions/download-artifact@v3
+      with:
+        name: java-app
+        path: '${{ github.workspace }}/board-api/target'
+        
+    
+    - uses: azure/docker-login@v1
+      with:
+        login-server: miniprojectacr.azurecr.io
+        username: ${{ secrets.acr_miniprojectacr_username }}
+        password: ${{ secrets.acr_miniprojectacr_password }}
+    
+    - name: Build and push image to ACR
+      id: build-image
+      run: |
+        docker build "$GITHUB_WORKSPACE/board-api" -f  "board-api/Dockerfile" -t miniprojectacr.azurecr.io/apiaksdev:${{ github.sha }} --label dockerfile-path=board-api/Dockerfile
+        docker push miniprojectacr.azurecr.io/apiaksdev:${{ github.sha }}
+    
+    - uses: azure/k8s-set-context@v1
+      with:
+         kubeconfig: ${{ secrets.aks_apiaksdev_kubeConfig }}
+      id: login
+    
+    - name: Create namespace
+      run: |
+        namespacePresent=`kubectl get namespace | grep api-aks-dev-pipeline | wc -l`
+        if [ $namespacePresent -eq 0 ]
+        then
+            echo `kubectl create namespace api-aks-dev-pipeline`
+        fi
+
+    - uses: azure/k8s-create-secret@v1
+      with:
+        namespace: api-aks-dev-pipeline
+        container-registry-url: miniprojectacr.azurecr.io
+        container-registry-username: ${{ secrets.acr_miniprojectacr_username }}
+        container-registry-password: ${{ secrets.acr_miniprojectacr_password }}
+        secret-name: apiaksdevdockerauth
+       
+    - uses: azure/k8s-deploy@v1.2
+      with:
+        namespace: api-aks-dev-pipeline
+        manifests: |
+          manifests/deployment.yml
+          manifests/service.yml
+        images: |
+          miniprojectacr.azurecr.io/apiaksdev:${{ github.sha }}
+        imagepullsecrets: |
+          apiaksdevdockerauth
