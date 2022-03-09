@@ -1,9 +1,34 @@
 on: [push]
 jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Java version
+        uses: actions/setup-java@v1
+        with:
+          java-version: '8'
+
+      - name: Build with Maven
+        run: mvn clean install --file board-api/pom.xml        
+
+      - name: Upload artifact for deployment job
+        uses: actions/upload-artifact@v3
+        with:
+          name: java-app
+          path: '${{ github.workspace }}/board-api/target/*.jar'
+
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@master
+#    - uses: actions/checkout@master
+
+    - uses: actions/download-artifact@v3
+      with:
+        name: java-app
+        path: '${{ github.workspace }}/board-api/target'
     
     - uses: azure/docker-login@v1
       with:
