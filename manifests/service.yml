@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+    name: "miniprojectaks-ece6"
+    labels:
+        app: "miniprojectaks-ece6"
+spec:
+    type: ClusterIP
+    ports:
+    - port: 8090
+      targetPort: 8090
+      protocol: TCP
+      name: http
+    selector:
+        app: "miniprojectaks-ece6"
