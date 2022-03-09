@@ -1,0 +1,19 @@
+apiVersion : apps/v1
+kind: Deployment
+metadata:
+  name: "miniprojectaks-ece6"
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: "miniprojectaks-ece6"
+  template:
+    metadata:
+      labels:
+        app: "miniprojectaks-ece6"
+    spec:
+      containers:
+        - name: "miniprojectaks-ece6"
+          image: "miniprojectacr.azurecr.io/miniprojectaks"
+          ports:
+          - containerPort: 8090
