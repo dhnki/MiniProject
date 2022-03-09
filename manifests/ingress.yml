@@ -1,0 +1,17 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+    name: "miniprojectaks-ece6"
+    labels:
+        app: "miniprojectaks-ece6"
+    annotations:
+        kubernetes.io/ingress.class: addon-http-application-routing
+spec:
+    rules:
+        - host: miniproject-aks-miniprojectaks-ece6.bc5b9abbaa714e7ca380.koreacentral.aksapp.io
+          http:
+            paths:
+            - path: /
+              backend:
+                serviceName: "miniprojectaks-ece6"
+                servicePort: 8090
