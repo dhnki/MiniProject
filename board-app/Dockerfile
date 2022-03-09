@@ -1,6 +1,6 @@
 # build stage
 FROM node:lts-alpine as build-stage
-WORKDIR /MiniProject/board-app
+WORKDIR /home/runner/work/MiniProject/MiniProject/board-app
 RUN npm install --production
 COPY . .
 RUN npm run build
