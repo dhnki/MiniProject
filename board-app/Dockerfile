@@ -2,14 +2,11 @@
 FROM node:lts-alpine as build-stage
 WORKDIR /app
 COPY package.json ./
-# RUN npm install --production
-# COPY . .
-# RUN npm run build
-
-RUN yarn install 
-ENV NODE_ENV production 
-RUN yarn build
-
+RUN npm install --production
+RUN npm install vue
+RUN npm install –g @vue/cli
+COPY . .
+RUN npm run build
 
 # production stage
 FROM nginx:stable-alpine as production-stage
