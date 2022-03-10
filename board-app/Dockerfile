@@ -1,12 +1,13 @@
 # build stage
 FROM node:lts-alpine as build-stage
-WORKDIR /board-app
+WORKDIR /app
+RUN npm cache clean --force
 RUN npm install --production
 COPY . .
 RUN npm run build
 
 # production stage
 FROM nginx:stable-alpine as production-stage
-COPY --from=build-stage /board-app/dist /usr/share/nginx/html
+COPY --from=build-stage /app/dist /usr/share/nginx/html
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
