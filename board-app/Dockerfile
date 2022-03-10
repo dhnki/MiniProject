@@ -6,7 +6,6 @@ COPY package.json ./
 # COPY . .
 # RUN npm run build
 
-RUN npm install -g yarn 
 RUN yarn install 
 ENV NODE_ENV production 
 RUN yarn build
