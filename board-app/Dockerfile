@@ -2,9 +2,15 @@
 FROM node:lts-alpine as build-stage
 WORKDIR /app
 COPY package.json ./
-RUN npm install --production
-COPY . .
-RUN npm run build
+# RUN npm install --production
+# COPY . .
+# RUN npm run build
+
+RUN npm install -g yarn 
+RUN yarn install 
+ENV NODE_ENV production 
+RUN yarn build
+
 
 # production stage
 FROM nginx:stable-alpine as production-stage
